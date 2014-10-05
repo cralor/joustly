@@ -4,7 +4,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var devices = require('express-device');
 
-var gameHasStarted = false;
+var gameIsCreated = false;
 
 
 // all environments
@@ -107,6 +107,7 @@ io.on('connection', function(socket) {
   var timer;
 
   socket.on('createGame', function (gameInfo) {
+    gameIsCreated = true;
     if (activeRooms[gameInfo.id]) {
       return socket.emit('roomStatus', 1);
     }
@@ -117,19 +118,19 @@ io.on('connection', function(socket) {
 
 
   socket.on('newJoin', function (hotlad) {
-    if (gameHasStarted) {
+    if (gameIsCreated) {
       roomId = hotlad.roomId;
       console.log('hotlad:', hotlad);
       name = hotlad.name;
       socket.join(roomId);
       activeRooms[roomId].count++;
       activeRooms[roomId].players[name] = new Player(name);
+
       return socket.emit('joinStatus', 0);
     }
   });
 
   socket.on('gameStart', function(roomId) {
-    gameHasStarted = true;
     console.log(roomId);
     socket.emit('gameStart');
     io.to(roomId).emit('gameStart');
