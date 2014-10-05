@@ -1,4 +1,4 @@
 joustly
 =======
 
-"Johan Sebastion Jouster" for the mobile web
+"Johann Sebastian Joust" for the mobile web
