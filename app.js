@@ -75,18 +75,25 @@ function Game(obj) {
   var state = 1;
   this.count = 0;
   this.deathCount = 0;
-  this.players = new Object
+  this.players = new Object();
+
+  var randomInterval = 4000;
 
   //I think this will work
   // state: (fast or slow)
   function loop() {
+    randomInterval = (Math.floor((Math.random() * 7) + 1) + 3) * 1000;
+    setTimeout(loop, randomInterval);
+
+    console.log("time to song switch: " + randomInterval);
+
     state *= -1;
     socket.emit('toggleGameState', state);
     io.to(room).emit('toggleGameState', state);
   }
 
   this.start = function() {
-    setInterval(loop, 4000)
+    setTimeout(loop, randomInterval);
   }
 
 }
