@@ -4,6 +4,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var devices = require('express-device');
 
+var gameHasStarted = false;
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -115,16 +117,19 @@ io.on('connection', function(socket) {
 
 
   socket.on('newJoin', function (hotlad) {
-    roomId = hotlad.roomId;
-    console.log('hotlad:', hotlad);
-    name = hotlad.name;
-    socket.join(roomId);
-    activeRooms[roomId].count++;
-    activeRooms[roomId].players[name] = new Player(name);
-    return socket.emit('joinStatus', 0);
+    if (gameHasStarted) {
+      roomId = hotlad.roomId;
+      console.log('hotlad:', hotlad);
+      name = hotlad.name;
+      socket.join(roomId);
+      activeRooms[roomId].count++;
+      activeRooms[roomId].players[name] = new Player(name);
+      return socket.emit('joinStatus', 0);
+    }
   });
 
   socket.on('gameStart', function(roomId) {
+    gameHasStarted = true;
     console.log(roomId);
     socket.emit('gameStart');
     io.to(roomId).emit('gameStart');
