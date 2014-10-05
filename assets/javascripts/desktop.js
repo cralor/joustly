@@ -17,6 +17,13 @@ function createGame() {
 
 socket.on('gameStart', cueMusic);
 socket.on('toggleGameState', dropDaBootyBass);
+socket.on('endGame', function gameOver(winner){
+	socket.removeAllListeners('toggleGameState');
+	$('#h1').text('the winner is ' + winner);
+	$("#slow")[0].pause();
+	$("#fast")[0].pause();
+});
+
 
 function dropDaBootyBass(speed) {
 	console.log(speed)
@@ -29,7 +36,6 @@ function dropDaBootyBass(speed) {
 }
 
 function cueMusic(roomId){
-	console.log(roomId);
 	dropDaBootyBass(1);
 	$("#button").remove();
 }

@@ -51,13 +51,15 @@ function popCheck(roomId) {
 }
 
 function findVictor(room){
-  console.log(room);
   if (room.deathCount == room.count - 1) {
-    var winner = Object.keys(room.players).find(function(name) {
-      if(room.players[name].living) return name;
+    console.log(Object.keys(room.players));
+    var winner;
+    Object.keys(room.players).forEach(function(name) {
+      if(room.players[name].living) return winner = name;
     })
-    return winner;
   }
+  console.log(winner)
+  return winner;
 }
 /*
  * casts to clients
@@ -73,7 +75,7 @@ function Game(obj) {
   var state = 1;
   this.count = 0;
   this.deathCount = 0;
-  this.players = new Object();
+  this.players = new Object
 
   //I think this will work
   // state: (fast or slow)
@@ -100,6 +102,7 @@ io.on('connection', function(socket) {
       return socket.emit('roomStatus', 1);
     }
     activeRooms[gameInfo.id] = new Game({room: gameInfo.id, socket: socket});
+    socket.join(gameInfo.id);
     socket.emit('roomStatus', 0);
   })
 
@@ -109,6 +112,7 @@ io.on('connection', function(socket) {
     console.log('hotlad:', hotlad);
     name = hotlad.name;
     socket.join(roomId);
+    activeRooms[roomId].count++;
     activeRooms[roomId].players[name] = new Player(name);
     return socket.emit('joinStatus', 0);
   });
@@ -121,18 +125,17 @@ io.on('connection', function(socket) {
   });
 
   socket.on('death', function(payload) {
-    console.log('DEADTHHHHHH');
-    console.log(payload);
     var doge;
     var room;
     if (room = activeRooms[payload.roomId]) {
       room.deathCount++;
       room.players[payload.username].living = false;
+      room.players
       doge = findVictor(room);
       if (doge) {
         console.log('winner:', doge);
-        io.to(payload.roomId).emit('winnerWinnerChickenDinner', doge);
-        socket.emit('winnerWinnerChickenDinner', doge);
+        io.to(payload.roomId).emit('endGame', doge);
+        socket.emit('endGame', doge);
         delete activeRooms[payload.roomId];
       }
     }

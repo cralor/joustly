@@ -18,18 +18,7 @@ function joinGame() {
   socket.emit('newJoin', hotLoad);
 }
 
-function DOManipsMaster() {
-  isMaster = true;
-  var but = document.getElementById('butt');
-  but.innerText = "START";
 
-  but.onclick = function() {
-    document.getElementById('username').setAttribute('type', 'hidden');
-    document.getElementById('room').setAttribute('type', 'hidden');
-    document.getElementById('butt').remove();
-    socket.emit('gamestart', roomId);
-  }
-}
 
 function DOManipsLave() {
   document.getElementById('room').setAttribute('type', 'hidden');
@@ -54,7 +43,7 @@ socket.on('roomStatus', function(msg) {
   }
 });
 
-socket.on('winnerWinnerChickenDinner', function(winner){
+socket.on('endGame', function(winner){
   var color;
   if (name === winner) {
     color = 'green';
@@ -90,7 +79,6 @@ function death() {
   }
 }
 
-
 var prev_accel,
     prev_x = 0,
     prev_y = 0,
@@ -99,10 +87,34 @@ var prev_accel,
     slowThresh = 2,
     thresh = fastThresh;
 
-// game starts at fast
+
+
 socket.on('toggleGameState', function (i) {
-  if (i === 1) return window.threshold.number = 15
-    window.threshold.number = 7
+  var slowPlayer = document.getElementById('slow');
+  var fastPlayer = document.getElementById('fast');
+
+  // slow
+  if (i === -1) {
+    thresh = slowThresh;
+    fastPlayer.pause();
+    slowPlayer.play();
+    // normal
+  } else if (i === 1) {
+    slowPlayer.pause();
+    fastPlayer.play();
+    thresh = fastThresh;
+  }
 });
 
-console.log(thresh);
+window.ondevicemotion = function (e) {
+  var accel = e.accelerationIncludingGravity;
+  if (Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.y - prev_y) > thresh ||
+      Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.z - prev_y) > thresh ||
+      Math.abs(accel.y - prev_y) > thresh && Math.abs(accel.z - prev_z) > thresh){
+        death();
+      }
+
+  prev_x = accel.x;
+  prev_y = accel.y;
+  prev_z = accel.z;
+}
