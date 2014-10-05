@@ -10,12 +10,6 @@ function joinGame() {
     name: document.getElementById('username').value
   }
 
-  // hack to unmute audio in iOS
-  document.getElementById('slow').play();
-  document.getElementById('slow').pause();
-  document.getElementById('fast').play();
-  document.getElementById('fast').pause();
-
   username = hotLoad.name;
   roomId = hotLoad.roomId;
   socket.emit('newJoin', hotLoad)
