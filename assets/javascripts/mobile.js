@@ -3,9 +3,6 @@ var isMaster;
 var roomId;
 var username;
 var isLiving = true;
-window.addEventListener('shake', death, false);
-window.threshold = {};
-window.threshold.number = 15;
 
 function joinGame() {
   var hotLoad = {
@@ -15,14 +12,8 @@ function joinGame() {
 
   username = hotLoad.name;
   roomId = hotLoad.roomId;
+
   socket.emit('newJoin', hotLoad);
-}
-
-
-
-function DOManipsLave() {
-  document.getElementById('room').setAttribute('type', 'hidden');
-  document.getElementById('butt').remove();
 }
 
 socket.on('test', function() {
@@ -35,33 +26,7 @@ socket.on('gameStart', function() {
   document.getElementById('butt').remove();
 });
 
-socket.on('roomStatus', function(msg) {
-  if (msg == 1) {
-    DOManipsMaster();
-  } else if (msg == 2) {
-    DOManipsLave();
-  }
-});
-
 socket.on('endGame', function(winner){
-  var color;
-  if (name === winner) {
-    color = 'green';
-  } else {
-    color = 'red';
-  }
-  setInterval (function() {
-    document.body.style.backgroundColor = color;
-    setTimeout(function() {
-      document.body.style.backgroundColor = "cyan"
-    }, 20)
-    setTimeout(function() {
-      document.body.style.backgroundColor = color;
-    }, 40)
-    setTimeout(function() {
-      document.body.style.backgroundColor = "cyan"
-    }, 60)
-  }, 80)
   document.getElementById('h1').innerText = winner + ' WON1!!!!'
 });
 

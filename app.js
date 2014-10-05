@@ -118,7 +118,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('gameStart', function(roomId) {
-    console.log(roomId)
+    console.log(roomId);
     socket.emit('gameStart');
     io.to(roomId).emit('gameStart');
     activeRooms[roomId].start();
@@ -130,7 +130,6 @@ io.on('connection', function(socket) {
     if (room = activeRooms[payload.roomId]) {
       room.deathCount++;
       room.players[payload.username].living = false;
-      room.players
       doge = findVictor(room);
       if (doge) {
         console.log('winner:', doge);
