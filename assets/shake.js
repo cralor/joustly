@@ -10,13 +10,13 @@
 
 (function (window, document) {
 
-    function Shake(threshold) {
+    function Shake() {
 
         //feature detect
         this.hasDeviceMotion = 'ondevicemotion' in window;
 
         //default velocity threshold for shake to register
-        this.threshold = threshold;
+        this.threshold = window.threshold.number;
 
         //use date to prevent multiple shakes firing
         this.lastTime = new Date();
@@ -82,7 +82,8 @@
         deltaY = Math.abs(this.lastY - current.y);
         deltaZ = Math.abs(this.lastZ - current.z);
 
-        if (((deltaX > this.threshold) && (deltaY > this.threshold)) || ((deltaX > this.threshold) && (deltaZ > this.threshold)) || ((deltaY > this.threshold) && (deltaZ > this.threshold))) {
+        if (((deltaX > this.threshold.number) && (deltaY > this.threshold.number)) || ((deltaX > this.threshold.number)
+          && (deltaZ > this.threshold.number)) || ((deltaY > this.threshold.number) && (deltaZ > this.threshold.number))) {
             //calculate time in milliseconds since last shake registered
             currentTime = new Date();
             timeDifference = currentTime.getTime() - this.lastTime.getTime();
@@ -108,7 +109,7 @@
     };
 
     //create a new instance of shake.js.
-    var myShakeEvent = new Shake(5);
+    var myShakeEvent = new Shake();
     myShakeEvent && myShakeEvent.start();
 
 }(window, document));

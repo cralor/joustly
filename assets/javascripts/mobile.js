@@ -3,6 +3,9 @@ var isMaster;
 var roomId;
 var username;
 var isLiving = true;
+window.addEventListener('shake', death, false);
+window.threshold = {};
+window.threshold.number = 15;
 
 function joinGame() {
   var hotLoad = {
@@ -10,15 +13,9 @@ function joinGame() {
     name: document.getElementById('username').value
   }
 
-  // hack to unmute audio in iOS
-  document.getElementById('slow').play();
-  document.getElementById('slow').pause();
-  document.getElementById('fast').play();
-  document.getElementById('fast').pause();
-
   username = hotLoad.name;
   roomId = hotLoad.roomId;
-  socket.emit('newJoin', hotLoad)
+  socket.emit('newJoin', hotLoad);
 }
 
 function DOManipsMaster() {
@@ -41,13 +38,11 @@ function DOManipsLave() {
 
 socket.on('test', function() {
   alert('test');
-  document.getElementById('fast').play();
 });
 
 socket.on('gamestart', function() {
   document.getElementById('username').setAttribute('type', 'hidden');
   document.getElementById('room').setAttribute('type', 'hidden');
-  document.getElementById('fast').play();
   document.getElementById('butt').remove();
 });
 
@@ -90,7 +85,7 @@ function death() {
     };
 
     console.log(cornshot)
-      socket.emit('death', cornshot);
+    socket.emit('death', cornshot);
     isLiving = false;
   }
 }
@@ -106,34 +101,8 @@ var prev_accel,
 
 // game starts at fast
 socket.on('toggleGameState', function (i) {
-  var slowPlayer = document.getElementById('slow');
-  var fastPlayer = document.getElementById('fast');
-
-  // slow
-  if (i === -1) {
-    thresh = slowThresh;
-    fastPlayer.pause();
-    slowPlayer.play();
-    // normal
-  } else if (i === 1) {
-    slowPlayer.pause();
-    fastPlayer.play();
-    thresh = fastThresh;
-  }
+  if (i === 1) return window.threshold.number = 15
+    window.threshold.number = 7
 });
 
 console.log(thresh);
-
-window.ondevicemotion = function (e) {
-  var accel = e.accelerationIncludingGravity;
-  if (Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.y - prev_y) > thresh ||
-      Math.abs(accel.x - prev_x) > thresh && Math.abs(accel.z - prev_y) > thresh ||
-      Math.abs(accel.y - prev_y) > thresh && Math.abs(accel.z - prev_z) > thresh){
-        death();
-      }
-
-  prev_x = accel.x;
-  prev_y = accel.y;
-  prev_z = accel.z;
-}
-
