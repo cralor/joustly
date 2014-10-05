@@ -3,6 +3,10 @@ var socket = io.connect('/');
 
 function createGame() {
 	var roomId = $('#room').val();
+	if (roomId == '') {
+		console.log('enter a room #!!');
+		return;
+	}
 	socket.emit('createGame', {id: roomId});
 	$('#room').remove();
 	$('#button')[0].onclick = function gameStart() {

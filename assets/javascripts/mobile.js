@@ -40,7 +40,7 @@ socket.on('test', function() {
   alert('test');
 });
 
-socket.on('gamestart', function() {
+socket.on('gameStart', function() {
   document.getElementById('username').setAttribute('type', 'hidden');
   document.getElementById('room').setAttribute('type', 'hidden');
   document.getElementById('butt').remove();
