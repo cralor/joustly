@@ -82,7 +82,7 @@ function Game(obj) {
   //I think this will work
   // state: (fast or slow)
   function loop() {
-    randomInterval = (Math.floor((Math.random() * 7) + 1) + 3) * 1000;
+    randomInterval = Math.floor((Math.random() * 7) + 3) * 1000;
     setTimeout(loop, randomInterval);
 
     console.log("time to song switch: " + randomInterval);
