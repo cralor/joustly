@@ -48,8 +48,8 @@ var prev_accel,
     prev_x = 0,
     prev_y = 0,
     prev_z = 0,
-    fastThresh = 4,// threshold to be changed on
-    slowThresh = 2,
+    fastThresh = 12,// threshold to be changed on
+    slowThresh = 4,
     thresh = fastThresh;
 
 
