@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-johannjs
-========
-=======
 joustly
 =======
 
@@ -9,6 +5,3 @@ joustly
 
 ### Description
 *joustly* is a fun and active game using your web-capable smartphone.
-
-blahshguisghuisdgu
->>>>>>> Stashed changes
